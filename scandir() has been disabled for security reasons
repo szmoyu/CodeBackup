@@ -1,0 +1,17 @@
+在ubuntu下面安装了一个wordpress程序，在后台什么都没干，编辑主题时，发现页面中报下面的错误。
+
+notice: /home/wwwroot/test.localhost/wordpress/wp-content/themes is not readable in /home/wwwroot/test.localhost/wordpress/wp-includes/theme.php on line 447 Warning: scandir() has been disabled for security reasons in /home/wwwroot/test.localhost/wordpress/wp-includes/l10n.php on line 764
+这个是什么情况呢，赶快到网上搜了一下。
+
+原来是scandir被禁用了。通过lnmp探针也可以看到。
+
+很简单，编辑php.ini文件
+
+disable_functions = scandir,passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore,dl,pfsockopen,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket,fsockopen
+去掉scandir保存并重起php-fpm即可。
+
+php.ini 的位置：/usr/local/php/etc/php.ini
+
+最后执行/etc/init.d/php-fpm restart重启下
+
+等重启完后，再刷新页面，就会发现以前报的警告没有了。
